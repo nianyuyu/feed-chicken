@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="jquery.js"></script>
+    <link href="weiji.css"  rel="stylesheet" type="text/css">
+</head>
+<script>
+    var music_src;
+    var one=0;//向终点线的速度倍数
+    var one_back=0;//回来的速度倍数
+    var one1=null;
+    var one2=null;
+    var one3=null;
+
+    var two=0;
+    var two_back=0;
+    var two1=null;
+    var two2=null;
+    var two3=null;
+
+    var three=0;
+    var three_back=0;
+    var three1=null;
+    var three2=null;
+    var three3=null;
+    var four=0;
+    
+    var four_back=0;
+    var four1=null;
+    var four2=null;
+    var four3=null;
+    var flag=false;
+    var ctx;
+    var speed=10;
+    var chicken_speed=10;
+
+    var canvas_height=400;
+    var canvas_width=400;
+    var x_people=180;
+    var y_people=70;
+    var radius=25;
+    var chicken_one_x=65;
+    var chicken_one_y=215;
+    var chicken_two_x=155;
+    var chicken_two_y=215;
+    var chicken_three_x=245;
+    var chicken_three_y=215;
+    var chicken_four_x=335;
+    var chicken_four_y=215;
+
+    var ctx2;
+    var chicken_one_new_y;
+    var chicken_two_new_y;
+    var chicken_three_new_y;
+    var chicken_four_new_y;
+    window.onload=show;
+    var stop1;//到0s结束计时事件
+    var  stop2;
+function show(){
+
+    ctx2=document.getElementById("canvas2").getContext('2d');
+    ctx = document.getElementById("canvas").getContext('2d');
+    ctx2.beginPath();
+    ctx2.moveTo(0, 80);
+    ctx2.lineTo(150, 80);
+    ctx2.closePath();
+    ctx2.stroke();
+
+    ctx2.beginPath();
+    ctx2.moveTo(0, 210);
+    ctx2.lineTo(150, 210);
+    ctx2.closePath();
+    ctx2.stroke();
+
+    ctx2.beginPath();
+    ctx2.moveTo(0, 330);
+    ctx2.lineTo(150, 330);
+    ctx2.closePath();
+    ctx2.stroke();
+
+    ctx.fillRect(x_people, y_people, 40, 40);
+//鸡槽1
+    ctx.beginPath();
+    ctx.moveTo(40, 165);
+    ctx.lineTo(40, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(40, 185);
+    ctx.lineTo(90, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(90, 165);
+    ctx.lineTo(90, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = "rgb(181,230,29)";
+    ctx.fillRect(50, 165, 30, 20);
+
+//鸡槽2
+    ctx.beginPath();
+    ctx.moveTo(130, 165);
+    ctx.lineTo(130, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(130, 185);
+    ctx.lineTo(180, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(180, 165);
+    ctx.lineTo(180, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = "rgb(181,230,29)";
+    ctx.fillRect(140, 165, 30, 20);
+//鸡槽3
+    ctx.beginPath();
+    ctx.moveTo(220, 165);
+    ctx.lineTo(220, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(220, 185);
+    ctx.lineTo(270, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(270, 165);
+    ctx.lineTo(270, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = "rgb(181,230,29)";
+    ctx.fillRect(230, 165, 30, 20);
+//鸡槽4
+    ctx.beginPath();
+    ctx.moveTo(310, 165);
+    ctx.lineTo(310, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(310, 185);
+    ctx.lineTo(360, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(360, 165);
+    ctx.lineTo(360, 185);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = "rgb(181,230,29)";
+    ctx.fillRect(320, 165, 30, 20);
+
+//4只鸡
+    ctx.beginPath();
+    ctx.fillStyle = "rgb(255,242,0)";
+    ctx.arc(chicken_one_x, chicken_one_y, radius, 0, 2 * Math.PI, false);
+    ctx.arc(chicken_two_x, chicken_two_y, radius, 0, 2 * Math.PI, false);
+    ctx.arc(chicken_three_x, chicken_three_y, radius, 0, 2 * Math.PI, false);
+    ctx.arc(chicken_four_x, chicken_four_y, radius, 0, 2 * Math.PI, false);
+    ctx.closePath();
+    ctx.fill();
+
+//终点线
+    ctx.beginPath();
+    ctx.moveTo(10, 380);
+    ctx.lineTo(400, 380);
+    ctx.closePath();
+    ctx.stroke();
+
+}
+//判断输赢的函数
+    function result(){
+        jishi();
+        stop2=setTimeout("win();",5000*24);
+    }
+    function jishi(){
+        var num=document.getElementsByTagName("h1")[1].innerHTML;
+        document.getElementsByTagName("h1")[1].innerHTML=parseInt(num)-1+"s";
+        stop1=setTimeout("jishi()",1000);
+        if(parseInt(num)==1){
+            clear();
+        }
+    }
+
+    function clear(){
+        clearTimeout(stop1);
+    }
+    function win(){
+
+        clearTimeout(one1);
+        clearTimeout(one2);
+        clearTimeout(one3);
+        clearTimeout(two1);
+        clearTimeout(two2);
+        clearTimeout(two3);
+        clearTimeout(three1);
+        clearTimeout(three2);
+        clearTimeout(three3);
+        clearTimeout(four2);
+        clearTimeout(four1);
+        clearTimeout(four3);
+        ctx.clearRect(0,0,400,400);
+music_src.pause();
+        var gui=new Image();
+        gui.src="gui.jpg";
+        ctx.drawImage(gui,50,100,150,150);
+        var text="大神，请收下我的膝盖";
+
+        ctx.font=" 20px Microsoft YaHei";
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillText(text,200,200);
+        flag=true;
+        setTimeout("window.location.reload()",4000);
+
+    }
+    function lose(){
+        music_src.pause();
+        clearTimeout(one1);
+        clearTimeout(one2);
+        clearTimeout(one3);
+        clearTimeout(two1);
+        clearTimeout(two2);
+        clearTimeout(two3);
+        clearTimeout(three1);
+        clearTimeout(three2);
+        clearTimeout(three3);
+        clearTimeout(four2);
+        clearTimeout(four1);
+        clearTimeout(four3);
+        ctx.clearRect(0,0,400,400);
+
+        var lose=new Image();
+        lose.src="lose.png";
+        ctx.drawImage(lose,50,100,150,150);
+        lose.src="lose.png";
+        ctx.drawImage(lose,50,100,150,150);
+        lose.src="lose.png";
+        ctx.drawImage(lose,50,100,150,150);
+        var text="小样，你也就这点水准";
+        lose.src="lose.png";
+        ctx.drawImage(lose,50,100,150,150);
+    setTimeout("window.location.reload()",4000);
+        clear();
+        ctx.font=" 20px Microsoft YaHei";
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillText(text,200,200);
+        flag=true;
+
+//        document.getElementById("start").onclick=restart();
+    }
+
+
+    function  clearCanvas(x,y,width,height){
+        ctx.clearRect(x,y,width,height);
+    }
+
+
+    function start() {
+document.getElementById("start").removeAttribute("onclick");
+//开始计时
+        if (!flag) {
+            setTimeout("move1(); clearCanvas(50, 164, 30, 20)", 2500);
+            setTimeout("move2(); clearCanvas(140, 164, 30, 20)", 3000);
+            setTimeout("move3(); clearCanvas(230, 164, 30, 20)", 1500);
+            setTimeout("move4(); clearCanvas(320, 164, 30, 20)", 4000);
+
+        }
+    }
+
+    window.document.onkeyup = function(evt) {
+        evt = (evt) ? evt : window.event;
+        switch (evt.keyCode) {
+            case 37:    //左方向键
+                if(flag==false)moveLeft();
+                break;
+            case 38:    //上方向键
+                if(flag==false)moveUp();
+                break;
+            case 39:    //右方向键
+                if(flag==false)moveRight();
+                break;
+            case 40:    //下方向键
+                if(flag==false)moveDown();
+                break;
+            case 90:     
+                draw();
+
+                break;
+            default:
+                return;
+        }
+    }
+
+//向左
+    function moveLeft(){
+
+        clearCanvas(0, 0,400,165);
+        x_people-=speed;
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(x_people, y_people, 40, 40);
+        if (x_people < 10) {    //防止超出左边界
+            x_people = 10;
+            }
+    }
+//向右
+    function moveRight(){
+        clearCanvas(0, 0,400,165);
+        x_people+=speed;
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(x_people, y_people, 40, 40);
+        if (x_people > 350) {   //防止超出右边界
+                x_people = 350;
+            }
+    }
+//向下
+    function moveDown(){
+        clearCanvas(0, 0,400,165);
+        y_people+=speed;
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(x_people, y_people, 40, 40);
+        if (y_people > 110) {   //防止超出下边界
+                y_people = 110;
+            }
+    }
+//向上
+    function moveUp(){
+        clearCanvas(0, 0,400,165);
+        y_people-=speed;
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(x_people, y_people, 40, 40);
+        if (y_people < 10) {   //防止超出上边界
+            y_people = 10;
+        }
+    }
+
+
+//根据人的位置画鸡食物
+    function draw() {
+
+        if ((x_people <=50&&x_people>=40) && (y_people <=125&&y_people>=105)){
+            ctx.fillStyle = "rgb(181,230,29)";
+            ctx.fillRect(50, 165, 30, 20);
+            one_back=0;
+            change1();
+        }
+        if((x_people <=140&&x_people>=130) && (y_people <=125&&y_people>=105)){
+
+            ctx.fillStyle = "rgb(181,230,29)";
+            ctx.fillRect(140, 165, 30, 20);
+            two_back=0;
+            change2();
+        }
+        if((x_people <=230&&x_people>=220) && (y_people <=125&&y_people>=105)){
+
+            ctx.fillStyle = "rgb(181,230,29)";
+            ctx.fillRect(230, 165, 30, 20);
+            three_back=0;
+            change3();
+        }
+        if((x_people <=320&&x_people>=310) && (y_people <=125&&y_people>=105)){
+
+            ctx.fillStyle = "rgb(181,230,29)";
+            ctx.fillRect(320, 165, 30, 20);
+            four_back=0;
+            change4();
+        }
+    }
+
+    function change1(){
+        clearTimeout(one1);
+        clearCanvas(chicken_one_x-25,185,52,190);
+        if(!flag) {
+            back1();
+        }
+    }
+    function change2(){
+        clearTimeout(two1);
+        clearCanvas(chicken_two_x-25,185,52,190);
+        if(!flag) {
+            back2();
+        }
+    }
+    function change3(){
+        clearTimeout(three1);
+        clearCanvas(chicken_three_x-25,185,52,190);
+        if(!flag) {
+            back3();
+        }
+    }
+    function change4(){
+        clearTimeout(four1);
+        clearCanvas(chicken_four_x-25,185,52,190);
+        if(!flag) {
+            back4();
+        }
+    }
+
+    //鸡改变方向以后的运动
+    function back1(){
+        clearCanvas(chicken_one_x-25,185,52,192);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_one_new_y=chicken_one_y-chicken_speed * one_back;
+        one_back++;
+        ctx.arc(chicken_one_x, chicken_one_new_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+            one2 = setTimeout("back1()", 1000);
+            isArrival1();
+
+    }
+    function back2(){
+        clearCanvas(chicken_two_x-25,185,52,192);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_two_new_y=chicken_two_y-chicken_speed * two_back;
+        two_back++;
+        ctx.arc(chicken_two_x, chicken_two_new_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+
+            two2 = setTimeout("back2()", 1000);
+            isArrival2();
+
+    }
+    function back3(){
+        clearCanvas(chicken_three_x-25,185,52,192);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_three_new_y=chicken_three_y-chicken_speed * three_back;
+        three_back++;
+        ctx.arc(chicken_three_x, chicken_three_new_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+
+            three2 = setTimeout("back3()", 1000);
+            isArrival3();
+
+    }
+    function back4(){
+        clearCanvas(chicken_four_x-25,185,52,192);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_four_new_y=chicken_four_y-chicken_speed * four_back;
+        four_back++;
+        ctx.arc(chicken_four_x, chicken_four_new_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+
+            four2 = setTimeout("back4()", 1000);
+            isArrival4();
+
+    }
+
+    //检测鸡是否回到原来的位置
+    function isArrival1(){
+        if(chicken_one_new_y>=215&&chicken_one_new_y<=220){
+            clearTimeout(one2);
+            one3=setTimeout("disappear1();",2000);
+        }
+    }
+    //当鸡回到原来的位置时，食物过3S消失
+    function disappear1(){
+        clearCanvas(50, 164, 30, 20);
+        move1();
+
+    }
+    //鸡向终点线移动
+    function move1() {
+        one=0;
+        run1();
+    }
+    function run1() {
+        clearCanvas(chicken_one_x - 25, 186, 52, 190);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_one_y = 215 + chicken_speed * one;
+
+        ctx.arc(chicken_one_x, chicken_one_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+        one++;
+        one1 = setTimeout("run1();", 1000);
+        if (chicken_one_y >= 375) {
+            lose();
+        }
+    }
+
+
+
+
+
+
+
+
+    function isArrival2(){
+        if(chicken_two_new_y>=215&&chicken_two_new_y<=220){
+            clearTimeout(two2);
+            two3=setTimeout("disappear2();",2000);
+        }
+    }
+    function disappear2(){
+        clearCanvas(140, 164, 30, 20);
+        move2();
+
+    }
+
+    //鸡2移动
+    function move2() {
+        two=0;
+        run2();
+
+    }
+    
+
+    function run2() {
+        clearCanvas(chicken_two_x - 25, 186, 52, 190);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_two_y = 215 + chicken_speed * two;
+
+        ctx.arc(chicken_two_x, chicken_two_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+        two++;
+        two1 = setTimeout("run2();", 1000);
+        if (chicken_two_y >= 375) {
+            lose();
+        }
+    }
+
+
+
+
+
+
+
+    function isArrival3(){
+        if(chicken_three_new_y>=215&&chicken_three_new_y<=220){
+            clearTimeout(three2);
+            three3=setTimeout("disappear3();",2000);
+        }
+    }
+    function disappear3(){
+        clearCanvas(230, 164, 30, 20);
+        move3();
+
+    }
+
+    //鸡3移动
+    function move3() {
+        three=0;
+        run3();
+
+    }
+
+    function run3() {
+        clearCanvas(chicken_three_x - 25, 186, 52, 190);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_three_y = 215 + chicken_speed * three;
+
+        ctx.arc(chicken_three_x, chicken_three_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+        three++;
+        three1 = setTimeout("run3();", 1000);
+        if (chicken_three_y >= 375) {
+            lose();
+        }
+    }
+
+
+
+
+    function isArrival4(){
+        if(chicken_four_new_y>=215&&chicken_four_new_y<=220){
+            clearTimeout(four2);
+            four3=setTimeout("disappear4();",2000);
+        }
+    }
+    function disappear4(){
+        clearCanvas(320, 164, 30, 20);
+        move4();
+
+    }
+    function move4() {
+        four=0;
+        run4();
+
+    }
+
+    function run4() {
+        clearCanvas(chicken_four_x - 25, 186, 52, 190);
+        ctx = document.getElementById("canvas").getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(255,242,0)";
+        chicken_four_y = 215 + chicken_speed * four;
+
+        ctx.arc(chicken_four_x, chicken_four_y, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+        four++;
+        four1 = setTimeout("run4();", 1000);
+        if (chicken_four_y >= 375) {
+            lose();
+        }
+    }
+
+function play_music(){
+        music_src=document.getElementsByTagName("audio")[0];
+    music_src.play();
+    }
+
+</script>
+
+
+<body  >
+<div id="header">
+<h1 id="title">是英雄,就来喂鸡!</h1>
+<h1 id="time">120s</h1>
+</div>
+
+<canvas id="canvas" width="400" height="400" >
+    Your browser doesn't support  the HTML5
+</canvas>
+
+<div id="img">
+    <img src="3.png" id="three"/>
+    <img src="1.png" id="one"/>
+    <img src="2.png" id="two"/>
+</div>
+<canvas id="canvas2" width="150" height="400">
+
+</canvas>
+
+<div id="img2">
+    <div id="a"><img src="a.png" /></div>
+    <div id="c"><img src="c.png" /></div>
+    <div id="b"><img src="b.png" /></div>
+</div>
+
+<br/>
+<button id="start" onclick="start(); result();play_music(); "><span>Start</span></button>
+
+<audio autobuffer>
+    <source src="1.mp3"/>
+</audio>
+
+<audio autobuffer>
+    <source src="hithard.ogg" />
+    <source src="hithard.mp3" />
+</audio>
+<audio autobuffer>
+    <source src="inhale.ogg" />
+    <source src="inhale.mp3" />
+</audio>
+<audio autobuffer>
+    <source src="sword.ogg" />
+    <source src="sword.mp3" />
+</audio>
+<audio autobuffer>
+    <source src="crowdohh.ogg" />
+    <source src="crowdohh.mp3" />
+
+</body>
+</html>
