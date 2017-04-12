@@ -1,0 +1,48 @@
+body{
+    width:40%;
+    margin:auto;
+}
+#canvas{
+
+    height: 400px;
+    width: 400px;
+    margin:auto;
+}
+#header{
+    margin-top: 50px;
+}
+h2#title{
+
+    font-family:Microsoft YaHei ;
+    margin-left:10%;
+}
+#time{
+    font-family:Microsoft YaHei ;
+    margin-left:10%;
+}
+#start{
+    display: inline;
+    border: solid 1px #000000;
+    border-radius: 15px;
+    background-color: black;
+  
+   
+    height: 25px;
+    width: 70px;
+   
+}
+span {
+   padding-left: 4px;
+    color:white;
+    font-family: Microsoft YaHei;
+}
+
+
+h2{
+    display: inline;
+}
+#button_area{
+    width:400px;
+    text-align: center;
+
+}
